@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rudees Digital | Build Your Digital Presence</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        },
+                        accent: {
+                            DEFAULT: '#f97316', // Orange 500
+                            secondary: '#fb923c', // Orange 400
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-brand': 'linear-gradient(to right, #f97316 0%, #fb923c 100%)',
+                        'hero-pattern': 'radial-gradient(circle at 15% 50%, rgba(249, 115, 22, 0.15), transparent 25%), radial-gradient(circle at 85% 30%, rgba(251, 146, 60, 0.15), transparent 25%)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Styles & Animations */
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Space Grotesk', sans-serif; }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .bento-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bento-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(to right, #f97316 0%, #fb923c 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .floating-whatsapp {
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* Glassmorphism Navbar */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9); /* White glass */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* FAQ Accordion */
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        .faq-icon {
+            transition: transform 0.4s ease;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 antialiased overflow-x-hidden">
+
+    <!-- NAVBAR -->
+    <nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 glass-nav text-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="/" class="font-display font-bold text-2xl tracking-tight flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-brand flex items-center justify-center text-white">
+                        <i data-lucide="zap" class="w-5 h-5"></i>
+                    </div>
+                    Rudees Digital
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/about.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">About</a>
+                    <a href="/services.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">Services</a>
+                    <a href="/portfolio.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">Portfolio</a>
+                    <a href="/blog.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">Blog</a>
+                    
+                    <a href="/contact.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">Contact</a>
+                    <a href="/admin/index.html" class="text-sm font-bold text-accent hover:text-brand-900 transition-colors">Admin Panel</a>
+                    
+                    <!-- Desktop Mute Toggle -->
+                    <button class="mute-toggle text-gray-600 hover:text-accent transition-colors flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100" aria-label="Toggle Sound">
+                        <i data-lucide="volume-2" class="w-5 h-5 sound-icon-on block"></i>
+                        <i data-lucide="volume-x" class="w-5 h-5 sound-icon-off hidden"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-4">
+                    <!-- Mobile Mute Toggle -->
+                    <button class="mute-toggle text-gray-600 hover:text-accent transition-colors flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100" aria-label="Toggle Sound">
+                        <i data-lucide="volume-2" class="w-5 h-5 sound-icon-on block"></i>
+                        <i data-lucide="volume-x" class="w-5 h-5 sound-icon-off hidden"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-gray-900 hover:text-accent">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-1">
+                <a href="/about.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">About</a>
+                <a href="/services.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">Services</a>
+                <a href="/portfolio.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">Portfolio</a>
+                <a href="/blog.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">Blog</a>
+                
+                <a href="/contact.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">Contact</a>
+                <a href="/admin/index.html" class="block px-3 py-3 text-base font-bold text-accent hover:bg-brand-50 rounded-md mobile-link">Admin Panel</a>
+            </div>
+        </div>
+    </nav>
+
+        <!-- PAGE HERO -->
+    <section class="pt-32 pb-16 lg:pt-48 lg:pb-24 bg-orange-50 text-gray-900 overflow-hidden bg-hero-pattern relative">
+        <div class="absolute inset-0 bg-white/50"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-4 text-brand-900">
+                Portfolio
+            </h1>
+        </div>
+    </section>
+
+<section id="portfolio" class="py-24 bg-white text-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12 reveal">
+                <h2 class="font-display text-3xl md:text-5xl font-bold mb-6 text-brand-900">Selected Works</h2>
+                
+                <!-- Filters -->
+                <div class="flex flex-wrap justify-center gap-3 mt-8">
+                    <button class="filter-btn active px-6 py-2 rounded-full border border-gray-200 text-sm font-medium transition-all text-gray-700 flex items-center gap-2" data-filter="all"><i data-lucide="grid" class="w-4 h-4"></i> All</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition-all text-gray-700 flex items-center gap-2" data-filter="webdevelopment"><i data-lucide="monitor" class="w-4 h-4"></i> Web Development</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition-all text-gray-700 flex items-center gap-2" data-filter="graphicdesign"><i data-lucide="pen-tool" class="w-4 h-4"></i> Graphic Design</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition-all text-gray-700 flex items-center gap-2" data-filter="branding"><i data-lucide="star" class="w-4 h-4"></i> Branding</button>
+                    <button class="filter-btn px-6 py-2 rounded-full border border-gray-200 text-sm font-medium hover:bg-gray-50 transition-all text-gray-700 flex items-center gap-2" data-filter="digitalmarketing"><i data-lucide="trending-up" class="w-4 h-4"></i> Digital Marketing</button>
+                </div>
+            </div>
+
+            <!-- Portfolio Grid -->
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid">
+                <!-- Item 1 -->
+                <div class="portfolio-item group relative rounded-2xl overflow-hidden bg-brand-50 border border-brand-100 aspect-[4/3] reveal" data-category="ecommerce">
+                    <div class="absolute inset-0 bg-orange-50 flex items-center justify-center">
+                        <i data-lucide="shopping-bag" class="w-16 h-16 text-accent/30"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                        <div class="text-accent text-sm font-bold tracking-wider uppercase mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">E-Commerce</div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Luxe Fashion Store</h3>
+                        <p class="text-gray-300 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">Modern storefront with high conversion rates.</p>
+                        <a href="#" class="inline-flex items-center gap-2 text-white font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">View Project <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+                <!-- Item 2 -->
+                <div class="portfolio-item group relative rounded-2xl overflow-hidden bg-brand-50 border border-brand-100 aspect-[4/3] reveal" data-category="branding" style="transition-delay: 0.1s">
+                    <div class="absolute inset-0 bg-orange-50 flex items-center justify-center">
+                        <i data-lucide="hexagon" class="w-16 h-16 text-accent/30"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                        <div class="text-accent text-sm font-bold tracking-wider uppercase mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Branding</div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Fintech App Identity</h3>
+                        <p class="text-gray-300 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">Complete visual system for a mobile bank.</p>
+                        <a href="#" class="inline-flex items-center gap-2 text-white font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">View Project <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+                <!-- Item 3 -->
+                <div class="portfolio-item group relative rounded-2xl overflow-hidden bg-brand-50 border border-brand-100 aspect-[4/3] reveal" data-category="webdesign" style="transition-delay: 0.2s">
+                    <div class="absolute inset-0 bg-orange-50 flex items-center justify-center">
+                        <i data-lucide="layout-template" class="w-16 h-16 text-accent/30"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                        <div class="text-accent text-sm font-bold tracking-wider uppercase mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Web Design</div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">SaaS Landing Page</h3>
+                        <p class="text-gray-300 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">High-converting landing page for B2B software.</p>
+                        <a href="#" class="inline-flex items-center gap-2 text-white font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">View Project <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+                 <!-- Item 4 -->
+                 <div class="portfolio-item group relative rounded-2xl overflow-hidden bg-brand-50 border border-brand-100 aspect-[4/3] reveal" data-category="ecommerce">
+                    <div class="absolute inset-0 bg-orange-50 flex items-center justify-center">
+                        <i data-lucide="shopping-cart" class="w-16 h-16 text-accent/30"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                        <div class="text-accent text-sm font-bold tracking-wider uppercase mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">E-Commerce</div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Organic Beauty Shop</h3>
+                        <p class="text-gray-300 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">Custom Shopify theme development.</p>
+                        <a href="#" class="inline-flex items-center gap-2 text-white font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">View Project <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+                <!-- Item 5 -->
+                <div class="portfolio-item group relative rounded-2xl overflow-hidden bg-brand-50 border border-brand-100 aspect-[4/3] reveal" data-category="webdesign" style="transition-delay: 0.1s">
+                    <div class="absolute inset-0 bg-orange-50 flex items-center justify-center">
+                        <i data-lucide="globe" class="w-16 h-16 text-accent/30"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                        <div class="text-accent text-sm font-bold tracking-wider uppercase mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Web Design</div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Real Estate Portal</h3>
+                        <p class="text-gray-300 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">Property listing site with advanced search.</p>
+                        <a href="#" class="inline-flex items-center gap-2 text-white font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">View Project <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+                <!-- Item 6 -->
+                <div class="portfolio-item group relative rounded-2xl overflow-hidden bg-brand-50 border border-brand-100 aspect-[4/3] reveal" data-category="branding" style="transition-delay: 0.2s">
+                    <div class="absolute inset-0 bg-orange-50 flex items-center justify-center">
+                        <i data-lucide="pen-tool" class="w-16 h-16 text-accent/30"></i>
+                    </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/80 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-8">
+                        <div class="text-accent text-sm font-bold tracking-wider uppercase mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">Branding</div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-2 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-75">Local Cafe Rebrand</h3>
+                        <p class="text-gray-300 text-sm mb-4 transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-100">Logo, packaging, and menu design.</p>
+                        <a href="#" class="inline-flex items-center gap-2 text-white font-semibold transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300 delay-150">View Project <i data-lucide="arrow-right" class="w-4 h-4"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-white pt-20 pb-10 border-t border-gray-200 text-gray-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="md:col-span-2">
+                    <a href="/" class="font-display font-bold text-2xl tracking-tight flex items-center gap-2 text-brand-900 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-brand flex items-center justify-center text-white">
+                            <i data-lucide="zap" class="w-5 h-5"></i>
+                        </div>
+                        Rudees Digital
+                    </a>
+                    <p class="text-sm max-w-sm mb-6">Build Your Digital Presence. We craft exceptional websites, powerful brands, and digital experiences that drive results.</p>
+                    <div class="flex gap-4">
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 hover:text-brand-600 transition-colors">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 hover:text-brand-600 transition-colors">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 hover:text-brand-600 transition-colors">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 hover:text-brand-600 transition-colors">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-display font-bold text-brand-900 mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/about.html" class="hover:text-accent transition-colors">About Us</a></li>
+                        <li><a href="/services.html" class="hover:text-accent transition-colors">Services</a></li>
+                        <li><a href="/portfolio.html" class="hover:text-accent transition-colors">Portfolio</a></li>
+                        <li><a href="/blog.html" class="hover:text-accent transition-colors">Blog</a></li>
+                        <li class="mt-4"><a href="/admin/index.html" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 text-brand-900 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium"><i data-lucide="shield" class="w-4 h-4"></i> Admin Panel</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-display font-bold text-brand-900 mb-4">Contact</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3 group relative">
+                            <i data-lucide="mail" class="w-5 h-5 shrink-0 mt-0.5 text-accent"></i>
+                            <div class="flex items-center gap-2">
+                                <a href="mailto:info@rudeesdigital.dev" class="hover:text-brand-900 transition-colors" id="footer-email">info@rudeesdigital.dev</a>
+                                <button onclick="copyEmail()" class="text-gray-400 hover:text-brand-900 transition-colors" title="Copy to clipboard">
+                                    <i data-lucide="copy" class="w-4 h-4"></i>
+                                </button>
+                                <span id="copy-tooltip" class="absolute -top-8 left-8 bg-gray-900 text-white text-xs py-1 px-2 rounded opacity-0 transition-opacity pointer-events-none whitespace-nowrap z-50">Copied!</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 shrink-0 mt-0.5 text-accent"></i>
+                            <a href="https://wa.me/918160140848" target="_blank" class="hover:text-brand-900 transition-colors">+91 81601 40848</a>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 shrink-0 mt-0.5 text-accent"></i>
+                            <span>India</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+                &copy; <span id="year"></span> Rudees Digital. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    
+    <!-- FLOATING SOCIAL BUTTONS -->
+    <div class="fixed left-0 top-1/2 -translate-y-1/2 z-50 flex flex-col shadow-2xl rounded-r-xl overflow-hidden bg-white/80 backdrop-blur-md border border-gray-100">
+        <a href="https://instagram.com" target="_blank" class="w-12 h-12 flex items-center justify-center text-pink-600 hover:bg-pink-50 transition-colors" aria-label="Instagram">
+            <i data-lucide="instagram" class="w-5 h-5"></i>
+        </a>
+        <a href="https://facebook.com" target="_blank" class="w-12 h-12 flex items-center justify-center text-blue-600 hover:bg-blue-50 transition-colors border-t border-gray-100" aria-label="Facebook">
+            <i data-lucide="facebook" class="w-5 h-5"></i>
+        </a>
+    </div>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/918160140848" target="_blank" class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 transition-colors floating-whatsapp" aria-label="Chat on WhatsApp">
+        <i data-lucide="message-circle" class="w-7 h-7 fill-current"></i>
+    </a>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Set Current Year in Footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                mobileBtn.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileBtn.innerHTML = '<i data-lucide="menu" class="w-6 h-6"></i>';
+            }
+            lucide.createIcons();
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if(isMenuOpen) toggleMenu();
+            });
+        });
+
+        // Scroll Reveal Animations
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Animated Counters
+        const counters = document.querySelectorAll('.counter');
+        let countersStarted = false;
+
+        const counterObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !countersStarted) {
+                    countersStarted = true;
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const duration = 2000; // ms
+                        const increment = target / (duration / 16); // 60fps
+                        
+                        let current = 0;
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                counter.innerText = Math.ceil(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCounter();
+                    });
+                    observer.disconnect();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if(counters.length > 0) {
+            counterObserver.observe(counters[0].parentElement.parentElement);
+        }
+
+        </script>
+<script type="module" src="/portfolio-client.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const waLinks = document.querySelectorAll('a[href*="wa.me/"]');
+        waLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                fetch('/api/whatsapp-leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        phone: 'Visitor',
+                        message: 'Clicked WhatsApp link on ' + window.location.pathname
+                    })
+                }).catch(e => console.error(e));
+            });
+        });
+    });
+</script>
+</body>
+
+</html>

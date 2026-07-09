@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rudees Digital | Build Your Digital Presence</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Space Grotesk', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        },
+                        accent: {
+                            DEFAULT: '#f97316', // Orange 500
+                            secondary: '#fb923c', // Orange 400
+                        }
+                    },
+                    backgroundImage: {
+                        'gradient-brand': 'linear-gradient(to right, #f97316 0%, #fb923c 100%)',
+                        'hero-pattern': 'radial-gradient(circle at 15% 50%, rgba(249, 115, 22, 0.15), transparent 25%), radial-gradient(circle at 85% 30%, rgba(251, 146, 60, 0.15), transparent 25%)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        /* Custom Styles & Animations */
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Space Grotesk', sans-serif; }
+        
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .bento-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .bento-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1);
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(to right, #f97316 0%, #fb923c 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .floating-whatsapp {
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.5); }
+            70% { box-shadow: 0 0 0 15px rgba(37, 211, 102, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(37, 211, 102, 0); }
+        }
+
+        /* Glassmorphism Navbar */
+        .glass-nav {
+            background: rgba(255, 255, 255, 0.9); /* White glass */
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        /* FAQ Accordion */
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        .faq-icon {
+            transition: transform 0.4s ease;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+    
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 antialiased overflow-x-hidden">
+<nav id="navbar" class="fixed w-full z-50 transition-all duration-300 py-4 glass-nav text-gray-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <a href="/" class="font-display font-bold text-2xl tracking-tight flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-brand flex items-center justify-center text-white">
+                        <i data-lucide="zap" class="w-5 h-5"></i>
+                    </div>
+                    Rudees Digital
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="/about.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">About</a>
+                    <a href="/services.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">Services</a>
+                    <a href="/portfolio.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">Portfolio</a>
+                    <a href="/blog.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">Blog</a>
+                    
+                    <a href="/contact.html" class="text-sm font-medium text-gray-600 hover:text-accent transition-colors">Contact</a>
+                    <a href="/admin/index.html" class="text-sm font-bold text-accent hover:text-brand-900 transition-colors">Admin Panel</a>
+                    
+                    <!-- Desktop Mute Toggle -->
+                    <button class="mute-toggle text-gray-600 hover:text-accent transition-colors flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100" aria-label="Toggle Sound">
+                        <i data-lucide="volume-2" class="w-5 h-5 sound-icon-on block"></i>
+                        <i data-lucide="volume-x" class="w-5 h-5 sound-icon-off hidden"></i>
+                    </button>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center gap-4">
+                    <!-- Mobile Mute Toggle -->
+                    <button class="mute-toggle text-gray-600 hover:text-accent transition-colors flex items-center justify-center w-8 h-8 rounded-full hover:bg-gray-100" aria-label="Toggle Sound">
+                        <i data-lucide="volume-2" class="w-5 h-5 sound-icon-on block"></i>
+                        <i data-lucide="volume-x" class="w-5 h-5 sound-icon-off hidden"></i>
+                    </button>
+                    <button id="mobile-menu-btn" class="text-gray-900 hover:text-accent">
+                        <i data-lucide="menu" class="w-6 h-6"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 shadow-xl">
+            <div class="px-4 pt-2 pb-6 space-y-1">
+                <a href="/about.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">About</a>
+                <a href="/services.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">Services</a>
+                <a href="/portfolio.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">Portfolio</a>
+                <a href="/blog.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">Blog</a>
+                
+                <a href="/contact.html" class="block px-3 py-3 text-base font-medium text-gray-700 hover:text-accent hover:bg-brand-50 rounded-md mobile-link">Contact</a>
+                <a href="/admin/index.html" class="block px-3 py-3 text-base font-bold text-accent hover:bg-brand-50 rounded-md mobile-link">Admin Panel</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SERVICE HERO -->
+    <section class="pt-32 pb-16 lg:pt-48 lg:pb-24 bg-orange-50 text-gray-900 overflow-hidden bg-hero-pattern relative">
+        <div class="absolute inset-0 bg-white/50"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-white mb-6 border border-brand-100 shadow-sm reveal">
+                <i data-lucide="fingerprint" class="w-8 h-8 text-accent"></i>
+            </div>
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 text-brand-900 reveal" style="transition-delay: 0.1s">
+                Branding & Identity
+            </h1>
+            <p class="text-lg text-gray-600 max-w-2xl mx-auto reveal" style="transition-delay: 0.2s">
+                Cohesive brand identities, logos, color palettes, typography, and full guidelines that define your market presence.
+            </p>
+        </div>
+    </section>
+
+    <!-- SERVICE DETAILS -->
+    <section class="py-24 bg-white border-t border-gray-200">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="prose prose-lg prose-orange max-w-none text-gray-600 leading-relaxed reveal">
+                
+    <h2 class="font-display text-3xl font-bold text-brand-900 mb-6">Building Memorable Brand Identities</h2>
+    <p>Your brand is more than just a logo—it's the emotional connection you build with your customers. We create cohesive, powerful brand identities that differentiate you from the competition and foster trust.</p>
+    
+    <div class="bg-orange-50/50 p-8 rounded-2xl border border-brand-100 my-10">
+        <h3 class="font-display text-xl font-bold text-brand-900 mb-4">Comprehensive Brand Books</h3>
+        <p class="mb-4">We deliver full brand guidelines that ensure consistency across all your marketing channels. This includes:</p>
+        <ul class="space-y-2">
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-5 h-5 text-brand-500"></i> Logo usage rules (spacing, backgrounds, variations)</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-5 h-5 text-brand-500"></i> Primary and secondary color palettes (HEX, RGB, CMYK)</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-5 h-5 text-brand-500"></i> Typography hierarchy and font pairings</li>
+            <li class="flex items-center gap-2"><i data-lucide="check" class="w-5 h-5 text-brand-500"></i> Tone of voice and messaging pillars</li>
+        </ul>
+    </div>
+    
+    <div class="grid sm:grid-cols-2 gap-8 my-12">
+        <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+            <i data-lucide="pen-tool" class="w-8 h-8 text-brand-500 mb-4"></i>
+            <h4 class="font-bold text-brand-900 mb-2">Logo Design</h4>
+            <p class="text-sm">Timeless, versatile logos that encapsulate your brand's essence and scale beautifully across mediums.</p>
+        </div>
+        <div class="bg-gray-50 p-6 rounded-2xl border border-gray-100">
+            <i data-lucide="palette" class="w-8 h-8 text-brand-500 mb-4"></i>
+            <h4 class="font-bold text-brand-900 mb-2">Visual Identity</h4>
+            <p class="text-sm">Selecting the perfect colors, patterns, and visual elements that evoke the right emotions.</p>
+        </div>
+    </div>
+
+            </div>
+            
+            <div class="mt-16 pt-12 border-t border-gray-200 text-center reveal">
+                <h3 class="font-display text-2xl font-bold text-brand-900 mb-6">Ready to start your project?</h3>
+                <a href="/contact.html" class="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-brand-500 text-white font-semibold hover:bg-brand-600 transition-colors shadow-lg shadow-brand-500/25">
+                    Get in touch <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+<!-- FOOTER -->
+    <footer class="bg-white pt-20 pb-10 border-t border-gray-200 text-gray-600">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div class="md:col-span-2">
+                    <a href="/" class="font-display font-bold text-2xl tracking-tight flex items-center gap-2 text-brand-900 mb-4">
+                        <div class="w-8 h-8 rounded-lg bg-gradient-brand flex items-center justify-center text-white">
+                            <i data-lucide="zap" class="w-5 h-5"></i>
+                        </div>
+                        Rudees Digital
+                    </a>
+                    <p class="text-sm max-w-sm mb-6">Build Your Digital Presence. We craft exceptional websites, powerful brands, and digital experiences that drive results.</p>
+                    <div class="flex gap-4">
+                        <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 hover:text-brand-600 transition-colors">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 hover:text-brand-600 transition-colors">
+                            <i data-lucide="twitter" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 hover:text-brand-600 transition-colors">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 hover:text-brand-600 transition-colors">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="font-display font-bold text-brand-900 mb-4">Company</h4>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/about.html" class="hover:text-accent transition-colors">About Us</a></li>
+                        <li><a href="/services.html" class="hover:text-accent transition-colors">Services</a></li>
+                        <li><a href="/portfolio.html" class="hover:text-accent transition-colors">Portfolio</a></li>
+                        <li><a href="/blog.html" class="hover:text-accent transition-colors">Blog</a></li>
+                        <li class="mt-4"><a href="/admin/index.html" class="inline-flex items-center gap-2 px-3 py-1.5 bg-gray-100 text-brand-900 rounded-md hover:bg-gray-200 transition-colors text-sm font-medium"><i data-lucide="shield" class="w-4 h-4"></i> Admin Panel</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="font-display font-bold text-brand-900 mb-4">Contact</h4>
+                    <ul class="space-y-4 text-sm">
+                        <li class="flex items-start gap-3 group relative">
+                            <i data-lucide="mail" class="w-5 h-5 shrink-0 mt-0.5 text-accent"></i>
+                            <div class="flex items-center gap-2">
+                                <a href="mailto:info@rudeesdigital.dev" class="hover:text-brand-900 transition-colors" id="footer-email">info@rudeesdigital.dev</a>
+                                <button onclick="copyEmail()" class="text-gray-400 hover:text-brand-900 transition-colors" title="Copy to clipboard">
+                                    <i data-lucide="copy" class="w-4 h-4"></i>
+                                </button>
+                                <span id="copy-tooltip" class="absolute -top-8 left-8 bg-gray-900 text-white text-xs py-1 px-2 rounded opacity-0 transition-opacity pointer-events-none whitespace-nowrap z-50">Copied!</span>
+                            </div>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="phone" class="w-5 h-5 shrink-0 mt-0.5 text-accent"></i>
+                            <a href="https://wa.me/918160140848" target="_blank" class="hover:text-brand-900 transition-colors">+91 81601 40848</a>
+                        </li>
+                        <li class="flex items-start gap-3">
+                            <i data-lucide="map-pin" class="w-5 h-5 shrink-0 mt-0.5 text-accent"></i>
+                            <span>India</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="pt-8 border-t border-gray-200 text-center text-sm text-gray-500">
+                &copy; <span id="year"></span> Rudees Digital. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    
+    <!-- FLOATING SOCIAL BUTTONS -->
+    <div class="fixed left-0 top-1/2 -translate-y-1/2 z-50 flex flex-col shadow-2xl rounded-r-xl overflow-hidden bg-white/80 backdrop-blur-md border border-gray-100">
+        <a href="https://instagram.com" target="_blank" class="w-12 h-12 flex items-center justify-center text-pink-600 hover:bg-pink-50 transition-colors" aria-label="Instagram">
+            <i data-lucide="instagram" class="w-5 h-5"></i>
+        </a>
+        <a href="https://facebook.com" target="_blank" class="w-12 h-12 flex items-center justify-center text-blue-600 hover:bg-blue-50 transition-colors border-t border-gray-100" aria-label="Facebook">
+            <i data-lucide="facebook" class="w-5 h-5"></i>
+        </a>
+    </div>
+
+    <!-- FLOATING WHATSAPP BUTTON -->
+    <a href="https://wa.me/918160140848" target="_blank" class="fixed bottom-6 right-6 z-50 w-14 h-14 bg-green-500 text-white rounded-full flex items-center justify-center shadow-2xl hover:bg-green-600 transition-colors floating-whatsapp" aria-label="Chat on WhatsApp">
+        <i data-lucide="message-circle" class="w-7 h-7 fill-current"></i>
+    </a>
+
+    <!-- SCRIPTS -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Set Current Year in Footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Navbar Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-lg');
+            } else {
+                navbar.classList.remove('shadow-lg');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const mobileBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        let isMenuOpen = false;
+
+        function toggleMenu() {
+            isMenuOpen = !isMenuOpen;
+            if (isMenuOpen) {
+                mobileMenu.classList.remove('hidden');
+                mobileBtn.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileBtn.innerHTML = '<i data-lucide="menu" class="w-6 h-6"></i>';
+            }
+            lucide.createIcons();
+        }
+
+        mobileBtn.addEventListener('click', toggleMenu);
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if(isMenuOpen) toggleMenu();
+            });
+        });
+
+        // Scroll Reveal Animations
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, revealOptions);
+
+        revealElements.forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Animated Counters
+        const counters = document.querySelectorAll('.counter');
+        let countersStarted = false;
+
+        const counterObserver = new IntersectionObserver(function(entries, observer) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && !countersStarted) {
+                    countersStarted = true;
+                    counters.forEach(counter => {
+                        const target = +counter.getAttribute('data-target');
+                        const duration = 2000; // ms
+                        const increment = target / (duration / 16); // 60fps
+                        
+                        let current = 0;
+                        const updateCounter = () => {
+                            current += increment;
+                            if (current < target) {
+                                counter.innerText = Math.ceil(current);
+                                requestAnimationFrame(updateCounter);
+                            } else {
+                                counter.innerText = target;
+                            }
+                        };
+                        updateCounter();
+                    });
+                    observer.disconnect();
+                }
+            });
+        }, { threshold: 0.5 });
+
+        if(counters.length > 0) {
+            counterObserver.observe(counters[0].parentElement.parentElement);
+        }
+
+        // Portfolio Filtering
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        const portfolioItems = document.querySelectorAll('.portfolio-item');
+
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Remove active class from all
+                filterBtns.forEach(b => b.classList.remove('active'));
+                // Add active to clicked
+                btn.classList.add('active');
+                
+                const filterValue = btn.getAttribute('data-filter');
+                
+                portfolioItems.forEach(item => {
+                    if (filterValue === 'all' || item.getAttribute('data-category') === filterValue) {
+                        item.style.display = 'block';
+                        setTimeout(() => {
+                            item.style.opacity = '1';
+                            item.style.transform = 'scale(1)';
+                        }, 50);
+                    } else {
+                        item.style.opacity = '0';
+                        item.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            item.style.display = 'none';
+                        }, 300); // Match transition duration if added in CSS
+                    }
+                });
+            });
+        });
+
+        // Contact Form Handling (Client-side only)
+        const contactForm = document.getElementById('contact-form');
+        if (contactForm) {
+            const successMsg = document.getElementById('form-success');
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            
+            // Validation elements
+            const nameInput = document.getElementById('contact-name');
+            const emailInput = document.getElementById('contact-email');
+            const messageInput = document.getElementById('contact-message');
+            
+            const nameError = document.getElementById('error-name');
+            const emailError = document.getElementById('error-email');
+            const messageError = document.getElementById('error-message');
+
+            const validateEmail = (email) => {
+                return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+            };
+
+            const validateForm = () => {
+                let isValid = true;
+                
+                if (!nameInput.value.trim()) {
+                    nameError.classList.remove('hidden');
+                    nameInput.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    nameError.classList.add('hidden');
+                    nameInput.classList.remove('border-red-500');
+                }
+
+                if (!emailInput.value.trim() || !validateEmail(emailInput.value.trim())) {
+                    emailError.classList.remove('hidden');
+                    emailInput.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    emailError.classList.add('hidden');
+                    emailInput.classList.remove('border-red-500');
+                }
+                
+                if (!messageInput.value.trim()) {
+                    messageError.classList.remove('hidden');
+                    messageInput.classList.add('border-red-500');
+                    isValid = false;
+                } else {
+                    messageError.classList.add('hidden');
+                    messageInput.classList.remove('border-red-500');
+                }
+
+                return isValid;
+            };
+            
+            // Real-time validation
+            nameInput.addEventListener('input', () => {
+                if (nameInput.value.trim()) {
+                    nameError.classList.add('hidden');
+                    nameInput.classList.remove('border-red-500');
+                }
+            });
+            emailInput.addEventListener('input', () => {
+                if (emailInput.value.trim() && validateEmail(emailInput.value.trim())) {
+                    emailError.classList.add('hidden');
+                    emailInput.classList.remove('border-red-500');
+                }
+            });
+            messageInput.addEventListener('input', () => {
+                if (messageInput.value.trim()) {
+                    messageError.classList.add('hidden');
+                    messageInput.classList.remove('border-red-500');
+                }
+            });
+
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                if (!validateForm()) return;
+                
+                // Simulate form processing
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i data-lucide="loader-2" class="w-5 h-5 animate-spin mx-auto"></i>';
+                lucide.createIcons();
+                submitBtn.disabled = true;
+
+                
+                const formData = {
+                    name: nameInput.value.trim(),
+                    email: emailInput.value.trim(),
+                    phone: document.getElementById('contact-phone')?.value.trim() || '',
+                    service: document.getElementById('contact-service')?.value || '',
+                    message: messageInput.value.trim(),
+                    source: window.location.pathname
+                };
+
+                fetch('/api/leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                })
+                .then(res => res.json())
+                .then(data => {
+                    contactForm.reset();
+                    successMsg.classList.remove('hidden');
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    lucide.createIcons();
+                    
+                    setTimeout(() => {
+                        successMsg.classList.add('hidden');
+                    }, 5000);
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("Error submitting form. Please try again later.");
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                    lucide.createIcons();
+                });
+
+            });
+        }
+
+        
+        // Testimonial Slider Logic
+        const testimonialSlider = document.getElementById('testimonial-slider');
+        const prevTestimonialBtn = document.getElementById('prev-testimonial');
+        const nextTestimonialBtn = document.getElementById('next-testimonial');
+        
+        if (testimonialSlider && prevTestimonialBtn && nextTestimonialBtn) {
+            const getScrollAmount = () => testimonialSlider.firstElementChild.offsetWidth + 24; // Card width + gap
+            const indicatorDots = document.querySelectorAll('.indicator-dot');
+            
+            const updateIndicators = () => {
+                if(!indicatorDots.length) return;
+                const scrollLeft = testimonialSlider.scrollLeft;
+                const index = Math.round(scrollLeft / getScrollAmount());
+                indicatorDots.forEach((dot, i) => {
+                    if (i === index) {
+                        dot.classList.remove('bg-gray-300', 'hover:bg-brand-300');
+                        dot.classList.add('bg-brand-500', 'w-4');
+                    } else {
+                        dot.classList.remove('bg-brand-500', 'w-4');
+                        dot.classList.add('bg-gray-300', 'hover:bg-brand-300');
+                    }
+                });
+            };
+
+            testimonialSlider.addEventListener('scroll', updateIndicators);
+            window.addEventListener('resize', updateIndicators);
+            
+            prevTestimonialBtn.addEventListener('click', () => {
+                testimonialSlider.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+            });
+            
+            nextTestimonialBtn.addEventListener('click', () => {
+                testimonialSlider.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+            });
+
+            indicatorDots.forEach((dot, index) => {
+                dot.addEventListener('click', () => {
+                    testimonialSlider.scrollTo({ left: index * getScrollAmount(), behavior: 'smooth' });
+                });
+            });
+        }
+
+        // FAQ Accordion Logic
+        const faqItems = document.querySelectorAll('.faq-item');
+
+        faqItems.forEach(item => {
+            const button = item.querySelector('.faq-button');
+            const content = item.querySelector('.faq-content');
+
+            button.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+
+                // Close all items
+                faqItems.forEach(otherItem => {
+                    otherItem.classList.remove('active');
+                    otherItem.querySelector('.faq-content').style.maxHeight = null;
+                });
+
+                // Toggle current item
+                if (!isActive) {
+                    item.classList.add('active');
+                    content.style.maxHeight = content.scrollHeight + 'px';
+                }
+            });
+        });
+
+        // Ensure recalculation on resize for open accordions
+        window.addEventListener('resize', () => {
+            const activeItem = document.querySelector('.faq-item.active');
+            if (activeItem) {
+                const content = activeItem.querySelector('.faq-content');
+                content.style.maxHeight = content.scrollHeight + 'px';
+            }
+        });
+
+        // Sound Effects (Web Audio API)
+        let audioCtx = null;
+        let isMuted = false;
+
+        function initAudio() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+        }
+
+        function playSound(type) {
+            if (isMuted) return;
+            initAudio();
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            
+            if (type === 'hover') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.05);
+                
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.05, audioCtx.currentTime + 0.02);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.1);
+                
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.1);
+            } else if (type === 'click') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(400, audioCtx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(100, audioCtx.currentTime + 0.1);
+                
+                gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+                gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.02);
+                gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.15);
+                
+                osc.start(audioCtx.currentTime);
+                osc.stop(audioCtx.currentTime + 0.15);
+            }
+        }
+
+        // Attach sound to buttons
+        const soundButtons = document.querySelectorAll('.sound-btn, .faq-button');
+        soundButtons.forEach(btn => {
+            btn.addEventListener('mouseenter', () => playSound('hover'));
+            btn.addEventListener('mousedown', () => playSound('click'));
+        });
+
+        // Global Mute Toggle
+        const muteBtns = document.querySelectorAll('.mute-toggle');
+        muteBtns.forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                isMuted = !isMuted;
+                
+                const iconsOn = document.querySelectorAll('.sound-icon-on');
+                const iconsOff = document.querySelectorAll('.sound-icon-off');
+                
+                iconsOn.forEach(icon => {
+                    if (isMuted) icon.classList.add('hidden');
+                    else icon.classList.remove('hidden');
+                });
+                
+                iconsOff.forEach(icon => {
+                    if (isMuted) icon.classList.remove('hidden');
+                    else icon.classList.add('hidden');
+                });
+            });
+        });
+    
+        // Copy Email Functionality
+        function copyEmail() {
+            const email = 'info@rudeesdigital.dev';
+            navigator.clipboard.writeText(email).then(() => {
+                const tooltip = document.getElementById('copy-tooltip');
+                if (tooltip) {
+                    tooltip.style.opacity = '1';
+                    setTimeout(() => {
+                        tooltip.style.opacity = '0';
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('Failed to copy email: ', err);
+            });
+        }
+    </script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const waLinks = document.querySelectorAll('a[href*="wa.me/"]');
+        waLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                fetch('/api/whatsapp-leads', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        phone: 'Visitor',
+                        message: 'Clicked WhatsApp link on ' + window.location.pathname
+                    })
+                }).catch(e => console.error(e));
+            });
+        });
+    });
+</script>
+</body>
+
+</html>
