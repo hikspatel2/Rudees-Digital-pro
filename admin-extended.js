@@ -26,11 +26,19 @@ let reviewModal;
         });
         
         const leadsGroup = document.getElementById('nav-leads-group');
+        const leadsDropdown = document.getElementById('navbarDropdownLeads');
         if (leadsGroup) {
             if (index === 2 || index === 3) {
                 leadsGroup.classList.add('active', 'text-primary');
             } else {
                 leadsGroup.classList.remove('active', 'text-primary');
+            }
+        }
+        if (leadsDropdown) {
+            if (index === 2 || index === 3) {
+                leadsDropdown.classList.add('active', 'text-warning');
+            } else {
+                leadsDropdown.classList.remove('active', 'text-warning');
             }
         }
         
@@ -487,3 +495,17 @@ window.copyQuickReply = function(event) {
         alert('Failed to copy text to clipboard.');
     });
 };
+
+// Auto-close topMenu on mobile when a link is clicked
+window.addEventListener('DOMContentLoaded', () => {
+    const navLinks = document.querySelectorAll('#topMenu .nav-link:not(.dropdown-toggle), #topMenu .dropdown-item');
+    const topMenu = document.getElementById('topMenu');
+    navLinks.forEach(l => {
+        l.addEventListener('click', () => {
+            if (window.innerWidth < 992 && topMenu.classList.contains('show')) {
+                const bsCollapse = bootstrap.Collapse.getInstance(topMenu) || new bootstrap.Collapse(topMenu);
+                bsCollapse.hide();
+            }
+        });
+    });
+});

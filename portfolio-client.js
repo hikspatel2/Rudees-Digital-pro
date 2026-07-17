@@ -86,6 +86,15 @@ const lightboxImg = document.getElementById('pf-lightbox-img');
 const lightboxClose = document.getElementById('pf-lightbox-close');
 const lightboxPrev = document.getElementById('pf-lightbox-prev');
 const lightboxNext = document.getElementById('pf-lightbox-next');
+const modalBanner = document.getElementById('pf-modal-banner');
+if (modalBanner) {
+    modalBanner.classList.add('cursor-pointer');
+    modalBanner.addEventListener('click', () => {
+        currentGallery = [modalBanner.src];
+        openLightbox(0);
+    });
+}
+
 
 let currentGallery = [];
 let currentLightboxIndex = 0;
@@ -96,6 +105,19 @@ function openModal(item) {
     document.getElementById('pf-modal-banner').src = item.bannerImage || 'https://via.placeholder.com/800x400?text=No+Image';
     document.getElementById('pf-modal-category').textContent = item.category || 'Portfolio';
     document.getElementById('pf-modal-title').textContent = item.title;
+
+    // Update Document Meta
+    document.title = item.metaTitle || (item.title + ' | Rudees Digital');
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+        metaDesc.setAttribute('content', item.metaDescription || item.shortDescription || '');
+    } else {
+        const newMeta = document.createElement('meta');
+        newMeta.name = 'description';
+        newMeta.content = item.metaDescription || item.shortDescription || '';
+        document.head.appendChild(newMeta);
+    }
+
     
     // Optional fields
     if (item.client) {
@@ -171,6 +193,9 @@ function closeModal() {
     
     setTimeout(() => {
         modal.classList.add('hidden');
+    document.title = 'Portfolio | Rudees Digital';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.setAttribute('content', 'Explore our portfolio.');
         modal.classList.remove('flex');
         document.body.style.overflow = '';
     }, 300);

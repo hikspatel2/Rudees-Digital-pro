@@ -26,6 +26,8 @@ export const portfolios = pgTable('portfolios', {
   bannerImage: text('banner_image'),
   screenshots: text('screenshots'), // JSON string or comma separated
   slug: text('slug').notNull().unique(),
+  metaTitle: text('meta_title'),
+  metaDescription: text('meta_description'),
   createdAt: timestamp('created_at').defaultNow(),
 });
 

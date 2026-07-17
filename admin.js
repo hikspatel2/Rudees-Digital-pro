@@ -42,7 +42,27 @@ function checkAuth() {
         document.getElementById('admin-dashboard').classList.add('hidden');
     }
 }
-window.addEventListener('DOMContentLoaded', checkAuth);
+let quill;
+window.addEventListener('DOMContentLoaded', () => {
+    checkAuth();
+    if (document.getElementById('pf-details-editor')) {
+        quill = new Quill('#pf-details-editor', {
+            theme: 'snow',
+            placeholder: 'Describe the project in detail...',
+            modules: {
+                toolbar: [
+                    [{ 'header': [1, 2, 3, false] }],
+                    ['bold', 'italic', 'underline', 'strike'],
+                    [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                    ['link', 'clean']
+                ]
+            }
+        });
+        quill.on('text-change', function() {
+            document.getElementById('pf-details').value = quill.root.innerHTML;
+        });
+    }
+});
 
 
 
@@ -130,6 +150,7 @@ function generateSlug(text) {
 
 document.getElementById('btn-add-new').addEventListener('click', () => {
     portfolioForm.reset();
+    if (quill) quill.root.innerHTML = '';
     editingId = null;
     document.getElementById('pf-id').value = '';
     document.getElementById('pf-banner-preview-container').classList.add('hidden');
@@ -200,27 +221,17 @@ function renderPortfolioTable() {
                 ${p.featured ? '<i class="bi bi-star-fill text-warning"></i>' : '<i class="bi bi-star text-muted"></i>'}
             </td>
             <td class="text-end">
-                <button class="btn btn-sm btn-outline-primary me-1 btn-edit" data-id="${p.id}"><i class="bi bi-pencil"></i></button>
-                <button class="btn btn-sm btn-outline-secondary me-1 btn-duplicate" data-id="${p.id}"><i class="bi bi-copy"></i></button>
-                <button class="btn btn-sm btn-outline-danger btn-delete" data-id="${p.id}"><i class="bi bi-trash"></i></button>
+                <button class="btn btn-sm btn-outline-primary me-1" onclick="editPortfolio(${p.id})"><i class="bi bi-pencil"></i></button>
+                <button class="btn btn-sm btn-outline-secondary me-1" onclick="duplicatePortfolio(${p.id})"><i class="bi bi-copy"></i></button>
+                <button class="btn btn-sm btn-outline-danger" onclick="triggerDeletePortfolio(${p.id})"><i class="bi bi-trash"></i></button>
             </td>
         `;
         tbody.appendChild(tr);
     });
     
+    window.triggerDeletePortfolio = function(id) { deleteTargetId = id; deleteModal.show(); };
     // Attach events
-    document.querySelectorAll('.btn-edit').forEach(btn => {
-        btn.addEventListener('click', (e) => editPortfolio(e.currentTarget.dataset.id));
-    });
-    document.querySelectorAll('.btn-duplicate').forEach(btn => {
-        btn.addEventListener('click', (e) => duplicatePortfolio(e.currentTarget.dataset.id));
-    });
-    document.querySelectorAll('.btn-delete').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            deleteTargetId = e.currentTarget.dataset.id;
-            deleteModal.show();
-        });
-    });
+
 }
 
 // Search & Filter Events
@@ -250,6 +261,8 @@ btnSavePortfolio.addEventListener('click', async () => {
         technologyStack: document.getElementById('pf-tech').value,
         websiteUrl: document.getElementById('pf-website').value,
         githubUrl: document.getElementById('pf-github').value,
+            metaTitle: document.getElementById('pf-metaTitle').value,
+            metaDescription: document.getElementById('pf-metaDesc').value,
         status: document.getElementById('pf-status').value,
         displayOrder: parseInt(document.getElementById('pf-order').value) || 0,
         featured: document.getElementById('pf-featured').checked,
@@ -291,7 +304,7 @@ btnSavePortfolio.addEventListener('click', async () => {
 });
 
 // Edit Portfolio
-function editPortfolio(id) {
+window.editPortfolio = function(id) {
     const p = currentPortfolios.find(item => item.id == id);
     if (!p) return;
     
@@ -302,12 +315,15 @@ function editPortfolio(id) {
     document.getElementById('pf-title').value = p.title || '';
     document.getElementById('pf-shortDesc').value = p.shortDescription || '';
     document.getElementById('pf-details').value = p.fullDetails || '';
+    if (quill) quill.root.innerHTML = p.fullDetails || '';
     document.getElementById('pf-category').value = p.category || 'Web Development';
     document.getElementById('pf-client').value = p.clientName || '';
     document.getElementById('pf-date').value = p.completionDate || '';
     document.getElementById('pf-tech').value = p.technologyStack || '';
     document.getElementById('pf-website').value = p.websiteUrl || '';
     document.getElementById('pf-github').value = p.githubUrl || '';
+    document.getElementById('pf-metaTitle').value = p.metaTitle || '';
+    document.getElementById('pf-metaDesc').value = p.metaDescription || '';
     document.getElementById('pf-status').value = p.status || 'active';
     document.getElementById('pf-order').value = p.displayOrder || 0;
     document.getElementById('pf-featured').checked = p.featured || false;
@@ -328,12 +344,12 @@ function editPortfolio(id) {
     currentScreenshots = p.screenshots || [];
     renderScreenshotsPreview();
     
-    portfolioModal.show();
+    if(typeof updateSocialPreview === 'function') updateSocialPreview(); portfolioModal.show();
     setTimeout(checkAndRestoreDraft, 100);
 }
 
 // Duplicate Portfolio
-async function duplicatePortfolio(id) {
+window.duplicatePortfolio = async function(id) {
     const p = currentPortfolios.find(item => item.id == id);
     if (!p) return;
     
@@ -691,6 +707,7 @@ function checkAndRestoreDraft() {
                 document.getElementById('pf-title').value = draftData.title || '';
                 document.getElementById('pf-shortDesc').value = draftData.shortDesc || '';
                 document.getElementById('pf-details').value = draftData.details || '';
+                if (quill) quill.root.innerHTML = draftData.details || '';
                 document.getElementById('pf-category').value = draftData.category || 'Web Development';
                 document.getElementById('pf-client').value = draftData.client || '';
                 document.getElementById('pf-date').value = draftData.date || '';
@@ -769,6 +786,56 @@ if (changePasswordForm) {
         } finally {
             btn.disabled = false;
             btn.textContent = 'Update Password';
+        }
+    });
+}
+
+
+// Social Media Preview Updates
+window.updateSocialPreview = () => {
+    const titleInput = document.getElementById('pf-metaTitle');
+    const descInput = document.getElementById('pf-metaDesc');
+    const mainTitleInput = document.getElementById('pf-title');
+    const mainDescInput = document.getElementById('pf-shortDesc');
+    const imgInput = document.getElementById('pf-banner-url');
+    
+    const previewTitle = document.getElementById('social-preview-title');
+    const previewDesc = document.getElementById('social-preview-desc');
+    const previewImg = document.getElementById('social-preview-img');
+    
+    if (previewTitle) {
+        previewTitle.textContent = titleInput && titleInput.value.trim() ? titleInput.value : (mainTitleInput ? mainTitleInput.value : 'Project Title');
+        if (!previewTitle.textContent) previewTitle.textContent = 'Project Title';
+    }
+    
+    if (previewDesc) {
+        previewDesc.textContent = descInput && descInput.value.trim() ? descInput.value : (mainDescInput ? mainDescInput.value : 'Description...');
+        if (!previewDesc.textContent) previewDesc.textContent = 'Description...';
+    }
+    
+    if (previewImg) {
+        previewImg.src = imgInput && imgInput.value ? imgInput.value : 'https://via.placeholder.com/1200x630?text=Project+Image';
+    }
+};
+
+document.getElementById('portfolio-form').addEventListener('input', (e) => {
+    if (['pf-title', 'pf-shortDesc', 'pf-metaTitle', 'pf-metaDesc'].includes(e.target.id)) {
+        updateSocialPreview();
+    }
+});
+
+// Create a MutationObserver to watch for changes to the pf-banner-url hidden input
+const bannerUrlInput = document.getElementById('pf-banner-url');
+if (bannerUrlInput) {
+    const observer = new MutationObserver(updateSocialPreview);
+    observer.observe(bannerUrlInput, { attributes: true, attributeFilter: ['value'] });
+    
+    // Also patch the setter if properties are changed directly
+    const originalValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+    Object.defineProperty(bannerUrlInput, 'value', {
+        set: function(val) {
+            originalValueSetter.call(this, val);
+            updateSocialPreview();
         }
     });
 }
